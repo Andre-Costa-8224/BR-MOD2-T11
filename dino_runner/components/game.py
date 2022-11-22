@@ -14,7 +14,7 @@ class Game:
         self.playing = False
         self.game_speed = 20
         self.x_pos_bg = 0
-        self.y_pos_bg = 380
+        self.y_pos_bg = SCREEN_HEIGHT/1.4
 
         global dino
         dino = Dino()
@@ -30,17 +30,11 @@ class Game:
 
     def events(self):
         for event in pygame.event.get():
-            if event.type == KEYDOWN:
-                if event.key == K_SPACE:
-                    if dino.rect.y != dino.y:
-                        pass
-                    else:
-                        dino.pular()
             if event.type == pygame.QUIT:
                 self.playing = False
 
     def update(self):
-        dino.update()
+        dino.update(pygame.key.get_pressed())
         pass
 
     def draw(self):
