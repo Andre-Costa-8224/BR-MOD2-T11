@@ -28,6 +28,9 @@ class Dino():
 
     def pular(self):
         self.pulo = True
+    
+    def duck(self):
+        pass
 
     def draw(self, screen):
         screen.blit(self.image, (self.rect.x, self.rect.y))
