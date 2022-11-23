@@ -37,7 +37,7 @@ class Game:
             self.update()
             self.draw()
             self.points += 1
-            self.soundTracks()
+        self.soundTracks()
         pygame.quit()
 
     def events(self):
@@ -74,7 +74,7 @@ class Game:
         return txtfont
 
     def soundTracks(self):
-        
+        pygame.mixer.init()
         pygame.mixer.music.load(os.path.join(SONS_DIR, 'Enemy.mp3'))
         pygame.mixer.music.play(-1)
         pygame.mixer.music.set_volume(0.4)
