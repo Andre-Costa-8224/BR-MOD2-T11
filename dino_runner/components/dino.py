@@ -1,6 +1,6 @@
 from pygame.locals import *
 from pygame.sprite import Sprite
-from dino_runner.utils.constants import RUNNING, JUMPING, DUCKING, SCREEN_HEIGHT
+from dino_runner.utils.constants import RUNNING, JUMPING, DUCKING, SCREEN_HEIGHT, DINO_DEAD
 
 JUMP_SPEED = 8.5
 
@@ -25,7 +25,6 @@ class Dino(Sprite):
             self.index = 0
 
     def update(self, key):
-
         if self.jumping == False:
             self.run()
             if self.ducking:
@@ -70,6 +69,12 @@ class Dino(Sprite):
         
         self.rect.y = self.y-11
         self.ducking = False
+
+    def dead(self):
+        self.image = DINO_DEAD
+        if self.ducking:
+            self.rect.y = self.y-50
+        return self.image
 
     def draw(self, screen):
         screen.blit(self.image, (self.rect.x, self.rect.y))

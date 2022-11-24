@@ -3,12 +3,12 @@ from pygame.locals import *
 from dino_runner.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, SONS_DIR
 from dino_runner.components.dino import Dino
 from dino_runner.components.obstacles.obstacle_manager import ObstacleManager
-
+from dino_runner.components.clouds import Clouds
+from random import randrange
 import os
 
 class Game:
     def __init__(self):
-
         pygame.init()
         pygame.mixer.init()
         pygame.display.set_caption(TITLE)
@@ -21,10 +21,16 @@ class Game:
         self.game_speed = 20
         self.x_pos_bg = 0
         self.y_pos_bg = SCREEN_HEIGHT/1.4
+        self.x_pos_cloud = randrange(SCREEN_WIDTH-50, SCREEN_WIDTH+100, 50)
+        self.y_pos_cloud = randrange(50,150,50)
+        self.cloudSprites = pygame.sprite.Group()
+        for c in range(3):
+            self.cloudSprites.add(Clouds())
         self.points = 0
         self.lastScore = 0
         self.obstacle_manager = ObstacleManager()
         self.player = Dino()
+        self.soundTracks()
 
     def execute(self):
         self.running = True
@@ -46,7 +52,7 @@ class Game:
             self.points += 1
         self.deathCount += 1
         self.game_speed = 20
-        #self.soundTracks()]
+        self.soundTracks()
 
     def events(self):
         for event in pygame.event.get():
@@ -58,21 +64,24 @@ class Game:
         userInput = pygame.key.get_pressed()
         self.player.update(userInput)
         self.obstacle_manager.update(self)
+        self.cloudSprites.update()
         if self.points % 100 == 0:
             self.game_speed += 1
         
         self.lastScore = self.points
         
         if self.playing == False:
+            self.player.dead()
             self.points = 0
 
     def draw(self):
         self.clock.tick(FPS)
         self.screen.fill((255, 255, 255))
         self.draw_background()
+        self.draw_clouds()
         self.player.draw(self.screen)
         self.obstacle_manager.draw(self.screen)
-        self.screen.blit(self.score(self.points), (SCREEN_WIDTH/1.8, SCREEN_HEIGHT/7))
+        self.screen.blit(self.score(), (SCREEN_WIDTH/1.8, SCREEN_HEIGHT/7))
         pygame.display.update()
         pygame.display.flip()
 
@@ -85,6 +94,9 @@ class Game:
             self.screen.blit(BG, (image_width + self.x_pos_bg, self.y_pos_bg))
             self.x_pos_bg = 0
         self.x_pos_bg -= self.game_speed
+
+    def draw_clouds(self):
+        self.cloudSprites.draw(self.screen)
 
     def handle_events_on_menu(self):
         for event in pygame.event.get():
@@ -102,6 +114,7 @@ class Game:
         if self.deathCount == 0:
             self.textDraw('Press any key to start', halfw, halfh)
         else:
+            pygame.time.wait(1000)
             self.textDraw('Press any key to restart', halfw, halfh)
             self.textDraw(f'SCORE: {self.lastScore}', halfw, halfh+35)
             self.textDraw(f'Deaths: {self.deathCount}', halfw, halfh+70)
@@ -117,12 +130,11 @@ class Game:
         text_rect.center = (pos_w, pos_h)
         self.screen.blit(text,text_rect)
 
-    def score(self, pontos):
-        txtfont = pygame.font.SysFont('Arial', 32, True).render(f'PONTUAÇÃO: {pontos}', True, (0,0,0))
+    def score(self):
+        txtfont = pygame.font.SysFont('Arial', 32, True).render(f'PONTUAÇÃO: {self.lastScore}', True, (0,0,0))
         return txtfont
 
     def soundTracks(self):
-        pygame.mixer.init()
         pygame.mixer.music.load(os.path.join(SONS_DIR, 'Enemy.mp3'))
         pygame.mixer.music.play(-1)
-        pygame.mixer.music.set_volume(0.4)
+        pygame.mixer.music.set_volume(0.3)
