@@ -8,4 +8,6 @@ class Cactus(Obstacle):
         self.type = random.randint(0, 5)
         super().__init__(image, self.type)
         self.rect.y = SCREEN_HEIGHT/1.62
+        if self.type > 2:
+            self.rect.y = SCREEN_HEIGHT/1.74
 

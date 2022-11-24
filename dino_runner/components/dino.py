@@ -15,6 +15,7 @@ class Dino(Sprite):
         self.jumping = False
         self.ducking = False
         self.jump_level = JUMP_SPEED
+        self.jumpDown = False
 
     def run(self):
         self.index += 0.25
@@ -33,6 +34,8 @@ class Dino(Sprite):
                 self.rect.y = self.y-50
         elif self.jumping:
             self.jump()
+            if key[K_DOWN]:
+                self.jumpDown = True
         
 
         if (key[K_SPACE] or key[K_UP]) and self.jumping == False:
@@ -46,6 +49,12 @@ class Dino(Sprite):
         self.image = JUMPING
         self.rect.y -= self.jump_level * 4
         self.jump_level -= 0.8
+
+        """
+        if self.jumpDown:
+            self.rect.y -= self.jump_level * 4
+            self.jumpDown = False
+        """
 
         if self.jump_level < -JUMP_SPEED:
             self.rect.y = self.y-50
