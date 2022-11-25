@@ -107,7 +107,7 @@ class Game:
             self.draw_clouds()
             self.player.draw(self.screen)
             self.obstacle_manager.draw(self.screen)
-            self.screen.blit(self.score(), (SCREEN_WIDTH/1.8, SCREEN_HEIGHT/7))
+            self.screen.blit(self.score(), (SCREEN_WIDTH/1.9, SCREEN_HEIGHT/7))
             self.draw_power_up_time()
             self.power_up_manager.draw(self.screen)
             pygame.display.update()

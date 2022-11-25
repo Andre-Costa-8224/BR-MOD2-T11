@@ -17,6 +17,13 @@ RUNNING = [
     pygame.image.load(os.path.join(IMG_DIR, "Dino/DinoRun2.png")),
 ]
 
+RUNNING_SONIC = [
+    pygame.image.load(os.path.join(IMG_DIR, "Sonic/sonicRun1.png")),
+    pygame.image.load(os.path.join(IMG_DIR, "Sonic/sonicRun2.png")),
+    pygame.image.load(os.path.join(IMG_DIR, "Sonic/sonicRun3.png")),
+    pygame.image.load(os.path.join(IMG_DIR, "Sonic/sonicRun4.png"))
+]
+
 RUNNING_SHIELD = [
     pygame.image.load(os.path.join(IMG_DIR, "Dino/DinoRun1Shield.png")),
     pygame.image.load(os.path.join(IMG_DIR, "Dino/DinoRun2Shield.png")),
@@ -30,6 +37,7 @@ RUNNING_HAMMER = [
 JUMPING = pygame.image.load(os.path.join(IMG_DIR, "Dino/DinoJump.png"))
 JUMPING_SHIELD = pygame.image.load(os.path.join(IMG_DIR, "Dino/DinoJumpShield.png"))
 JUMPING_HAMMER = pygame.image.load(os.path.join(IMG_DIR, "Dino/DinoJumpHammer.png"))
+JUMPING_SONIC = pygame.image.load(os.path.join(IMG_DIR, 'Sonic/sonicAppear.png'))
 
 DUCKING = [
     pygame.image.load(os.path.join(IMG_DIR, "Dino/DinoDuck1.png")),
@@ -44,6 +52,13 @@ DUCKING_SHIELD = [
 DUCKING_HAMMER = [
     pygame.image.load(os.path.join(IMG_DIR, "Dino/DinoDuck1Hammer.png")),
     pygame.image.load(os.path.join(IMG_DIR, "Dino/DinoDuck2Hammer.png")),
+]
+
+DUCKING_SONIC = [
+    pygame.image.load(os.path.join(IMG_DIR, 'Sonic/sonicDuck1.png')),
+    pygame.image.load(os.path.join(IMG_DIR, 'Sonic/sonicDuck2.png')),
+    pygame.image.load(os.path.join(IMG_DIR, 'Sonic/sonicDuck3.png')),
+    pygame.image.load(os.path.join(IMG_DIR, 'Sonic/sonicDuck4.png'))
 ]
 
 DINO_DEAD = pygame.image.load(os.path.join(IMG_DIR, "Dino/DinoDead.png"))
@@ -67,6 +82,7 @@ BIRD = [
 CLOUD = pygame.image.load(os.path.join(IMG_DIR, 'Other/Cloud.png'))
 SHIELD = pygame.image.load(os.path.join(IMG_DIR, 'Other/shield.png'))
 HAMMER = pygame.image.load(os.path.join(IMG_DIR, 'Other/hammer.png'))
+SONIC = pygame.image.load(os.path.join(IMG_DIR, 'Sonic/sonicAppear.png'))
 
 BG = pygame.image.load(os.path.join(IMG_DIR, 'Other/Track.png'))
 
@@ -75,3 +91,4 @@ HEART = pygame.image.load(os.path.join(IMG_DIR, 'Other/SmallHeart.png'))
 DEFAULT_TYPE = "default"
 SHIELD_TYPE = "shield"
 HAMMER_TYPE = 'hammer'
+SONIC_TYPE = 'sonic'

@@ -3,6 +3,7 @@ import pygame
 
 from dino_runner.components.power_ups.shield import Shield
 from dino_runner.components.power_ups.hammer import Hammer
+from dino_runner.components.power_ups.sonic import Sonic
 from random import choice
 
 class PowerUpManager:
@@ -12,8 +13,8 @@ class PowerUpManager:
 
     def generate_power_up(self, score):
         if len(self.power_ups) == 0 and self.when_appears == score:
-            self.when_appears += random.randint(150, 350) 
-            self.power_ups.append(choice([Shield(), Hammer()]))
+            self.when_appears += random.randint(250, 450) 
+            self.power_ups.append(choice([Shield(), Hammer(), Sonic()]))
 
     def update(self, score, game_speed, player):
         self.generate_power_up(score)
@@ -21,8 +22,13 @@ class PowerUpManager:
             power_up.update(game_speed, self.power_ups)
             if player.rect.colliderect(power_up.rect):
                 power_up.start_time = pygame.time.get_ticks()
-                player.shield = True
                 player.has_power_up = True
+                if power_up.type == 'shield':
+                    player.shield = True
+                if power_up.type == 'hammer':
+                    player.hammer = True
+                if power_up.type == 'sonic':
+                    player.sonic = True
                 player.type = power_up.type
                 player.power_up_time = power_up.start_time + (power_up.duration * 1000)
                 self.power_ups.remove(power_up)
@@ -33,4 +39,4 @@ class PowerUpManager:
 
     def reset_power_ups(self):
         self.power_ups = []
-        self.when_appears = random.randint(150, 350)
+        self.when_appears = random.randint(250, 450)

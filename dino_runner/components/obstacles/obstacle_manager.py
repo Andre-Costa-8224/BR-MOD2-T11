@@ -19,8 +19,9 @@ class ObstacleManager:
                     game.playing = False
                     break
                 else:
-                    if game.player.type == 'hammer':
+                    if game.player.type == 'hammer' or game.player.type == 'sonic':
                         self.obstacles.remove(obstacle)
+                        game.points += 20
                     pass
 
     def draw(self, screen):
