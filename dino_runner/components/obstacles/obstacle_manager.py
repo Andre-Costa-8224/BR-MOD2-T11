@@ -1,5 +1,4 @@
 import pygame
-
 from dino_runner.utils.constants import SMALL_CACTUS, LARGE_CACTUS
 from dino_runner.components.obstacles.cactus import Cactus
 from dino_runner.components.obstacles.bird import Bird
@@ -17,8 +16,13 @@ class ObstacleManager:
         for obstacle in self.obstacles:
             obstacle.update(game.game_speed, self.obstacles)
             if game.player.rect.colliderect(obstacle.rect):
-                game.playing = False
-                break
+                if not game.player.has_power_up:
+                    game.playing = False
+                    break
+                else:
+                    if game.player.type == 'hammer':
+                        self.obstacles.remove(obstacle)
+                    pass
 
     def draw(self, screen):
         for obstacle in self.obstacles:

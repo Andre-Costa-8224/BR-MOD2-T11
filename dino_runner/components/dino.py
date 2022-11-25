@@ -1,14 +1,20 @@
 from pygame.locals import *
 from pygame.sprite import Sprite
-from dino_runner.utils.constants import RUNNING, JUMPING, DUCKING, SCREEN_HEIGHT, DINO_DEAD
+from dino_runner.utils.constants import RUNNING, JUMPING, DUCKING, SCREEN_HEIGHT, DINO_DEAD, DEFAULT_TYPE, SHIELD_TYPE, DUCKING_SHIELD, JUMPING_SHIELD, RUNNING_SHIELD, HAMMER_TYPE, DUCKING_HAMMER, JUMPING_HAMMER, RUNNING_HAMMER
 
 JUMP_SPEED = 8.5
 
+DUCK_IMG = {DEFAULT_TYPE: DUCKING, SHIELD_TYPE: DUCKING_SHIELD, HAMMER_TYPE: DUCKING_HAMMER}
+JUMP_IMG = {DEFAULT_TYPE: JUMPING, SHIELD_TYPE: JUMPING_SHIELD, HAMMER_TYPE: JUMPING_HAMMER}
+RUN_IMG = {DEFAULT_TYPE: RUNNING, SHIELD_TYPE: RUNNING_SHIELD, HAMMER_TYPE: RUNNING_HAMMER}
+
+
+
 class Dino(Sprite):
     def __init__(self):
-        self.imgdinolist = RUNNING
+        self.type = DEFAULT_TYPE
+        self.image = RUN_IMG[self.type][0]
         self.index = 0
-        self.image = self.imgdinolist[self.index]
         self.rect = self.image.get_rect()
         self.y = SCREEN_HEIGHT/1.5
         self.rect.center = (80, self.y)
@@ -16,10 +22,17 @@ class Dino(Sprite):
         self.ducking = False
         self.jump_level = JUMP_SPEED
         self.jumpDown = False
+        self.setup_state()
+
+    def setup_state(self):
+        self.has_power_up = False
+        self.shield = False
+        self.show_text = False
+        self.shield_time_up = 0
 
     def run(self):
+        self.image = RUN_IMG[self.type][int(self.index)]
         self.index += 0.25
-        self.image = self.imgdinolist[int(self.index)]
 
         if self.index > 1:
             self.index = 0
@@ -45,7 +58,7 @@ class Dino(Sprite):
             self.ducking = True
 
     def jump(self):
-        self.image = JUMPING
+        self.image = JUMP_IMG[self.type]
         self.rect.y -= self.jump_level * 4
         self.jump_level -= 0.8
 
@@ -61,7 +74,7 @@ class Dino(Sprite):
             self.jump_level = JUMP_SPEED
     
     def duck(self):
-        self.image = DUCKING[int(self.index)]
+        self.image = DUCK_IMG[self.type][int(self.index)]
         self.index += 0.25
 
         if self.index > 1:

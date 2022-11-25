@@ -1,11 +1,14 @@
 import pygame
 from pygame.locals import *
-from dino_runner.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, SONS_DIR
+from dino_runner.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, SONS_DIR, DEFAULT_TYPE
 from dino_runner.components.dino import Dino
 from dino_runner.components.obstacles.obstacle_manager import ObstacleManager
+from dino_runner.components.power_ups.power_up_manager import PowerUpManager
 from dino_runner.components.clouds import Clouds
 from random import randrange
 import os
+
+                    #SHIELD_TYPE = "shield"
 
 class Game:
     def __init__(self):
@@ -24,11 +27,15 @@ class Game:
         self.x_pos_cloud = randrange(SCREEN_WIDTH-50, SCREEN_WIDTH+100, 50)
         self.y_pos_cloud = randrange(50,150,50)
         self.cloudSprites = pygame.sprite.Group()
+
         for c in range(3):
             self.cloudSprites.add(Clouds())
+
         self.points = 0
         self.lastScore = 0
         self.obstacle_manager = ObstacleManager()
+        self.power_up_manager = PowerUpManager()
+        self.music_opt = "ImSoSorry.mp3"
         self.player = Dino()
         self.soundTracks()
 
@@ -45,6 +52,7 @@ class Game:
         # Game loop: events - update - draw
         self.playing = True
         self.obstacle_manager.reset_obstacles()
+        self.power_up_manager.reset_power_ups()
         while self.playing:
             self.events()
             self.update()
@@ -52,10 +60,15 @@ class Game:
             self.points += 1
         self.deathCount += 1
         self.game_speed = 20
-        self.soundTracks()
 
     def events(self):
         for event in pygame.event.get():
+            if pygame.key.get_pressed():
+                self.music_opt = 'Enemy.mp3'
+            elif pygame.key.get_pressed()[K_2]:
+                self.music_opt = 'ImSoSorry.mp3'
+            elif pygame.key.get_pressed()[K_3]:
+                self.music_opt = 'GiornosTheme.mp3'
             if event.type == pygame.QUIT:
                 self.playing = False
                 self.running = False
@@ -65,6 +78,8 @@ class Game:
         self.player.update(userInput)
         self.obstacle_manager.update(self)
         self.cloudSprites.update()
+        self.power_up_manager.update(self.points, self.game_speed, self.player)
+
         if self.points % 100 == 0:
             self.game_speed += 1
         
@@ -82,8 +97,23 @@ class Game:
         self.player.draw(self.screen)
         self.obstacle_manager.draw(self.screen)
         self.screen.blit(self.score(), (SCREEN_WIDTH/1.8, SCREEN_HEIGHT/7))
+        self.draw_power_up_time()
+        self.power_up_manager.draw(self.screen)
         pygame.display.update()
         pygame.display.flip()
+
+    def draw_power_up_time(self):
+        if self.player.has_power_up:
+            time_to_show = round((self.player.power_up_time - pygame.time.get_ticks()) / 1000, 2)
+            if time_to_show >= 0:
+                self.textDraw(
+                    f"{self.player.type.capitalize()} enabled for {time_to_show} seconds",
+                    SCREEN_WIDTH/2.5,
+                    30
+                )
+            else:
+                self.player.has_power_up = False
+                self.player.type = DEFAULT_TYPE
 
     def draw_background(self):
         image_width = BG.get_width()
@@ -135,6 +165,6 @@ class Game:
         return txtfont
 
     def soundTracks(self):
-        pygame.mixer.music.load(os.path.join(SONS_DIR, 'Enemy.mp3'))
+        pygame.mixer.music.load(os.path.join(SONS_DIR, self.music_opt))
         pygame.mixer.music.play(-1)
         pygame.mixer.music.set_volume(0.3)
