@@ -10,10 +10,10 @@ class PowerUp(Sprite):
         self.type = type
         self.rect = self.image.get_rect()
         if self.type == 'shield':
-            self.rect.x = SCREEN_WIDTH + random.randint(800, 1000)
+            self.rect.x = SCREEN_WIDTH + random.randint(400, 600)
             self.rect.y = random.randint(125, 175)
         else:
-            self.rect.x = SCREEN_WIDTH + random.randint(800, 1000)
+            self.rect.x = SCREEN_WIDTH + random.randint(400, 600)
             self.rect.y = random.randint(250, 360)
 
         self.duration = random.randint(5, 10)

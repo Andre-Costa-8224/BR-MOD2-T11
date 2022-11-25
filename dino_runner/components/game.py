@@ -8,7 +8,6 @@ from dino_runner.components.clouds import Clouds
 from random import randrange
 import os
 
-                    #SHIELD_TYPE = "shield"
 
 class Game:
     def __init__(self):
@@ -35,12 +34,12 @@ class Game:
         self.lastScore = 0
         self.obstacle_manager = ObstacleManager()
         self.power_up_manager = PowerUpManager()
-        self.music_opt = "ImSoSorry.mp3"
         self.player = Dino()
-        self.soundTracks()
+        self.pause = False
 
     def execute(self):
         self.running = True
+        soundTracks('Enemy.mp3')
         while self.running:
             if not self.playing:
                 self.show_menu()
@@ -55,7 +54,10 @@ class Game:
         self.power_up_manager.reset_power_ups()
         while self.playing:
             self.events()
-            self.update()
+            if self.pause:
+                self.showMusicMenu()
+            else:
+                self.update()
             self.draw()
             self.points += 1
         self.deathCount += 1
@@ -63,12 +65,18 @@ class Game:
 
     def events(self):
         for event in pygame.event.get():
-            if pygame.key.get_pressed():
-                self.music_opt = 'Enemy.mp3'
-            elif pygame.key.get_pressed()[K_2]:
-                self.music_opt = 'ImSoSorry.mp3'
-            elif pygame.key.get_pressed()[K_3]:
-                self.music_opt = 'GiornosTheme.mp3'
+            key = pygame.key.get_pressed()
+            if key[K_1]:
+                soundTracks('Enemy.mp3')
+                self.pause = False
+            elif key[K_2]:
+                self.pause = False
+                soundTracks('ImSoSorry.mp3')
+            elif key[K_3]:
+                soundTracks('GiornosTheme.mp3')
+                self.pause = False
+            elif key[K_ESCAPE]:
+                self.pause = True
             if event.type == pygame.QUIT:
                 self.playing = False
                 self.running = False
@@ -90,17 +98,20 @@ class Game:
             self.points = 0
 
     def draw(self):
-        self.clock.tick(FPS)
-        self.screen.fill((255, 255, 255))
-        self.draw_background()
-        self.draw_clouds()
-        self.player.draw(self.screen)
-        self.obstacle_manager.draw(self.screen)
-        self.screen.blit(self.score(), (SCREEN_WIDTH/1.8, SCREEN_HEIGHT/7))
-        self.draw_power_up_time()
-        self.power_up_manager.draw(self.screen)
-        pygame.display.update()
-        pygame.display.flip()
+        if self.pause:
+            self.clock.tick(FPS)
+        else:
+            self.clock.tick(FPS)
+            self.screen.fill((255, 255, 255))
+            self.draw_background()
+            self.draw_clouds()
+            self.player.draw(self.screen)
+            self.obstacle_manager.draw(self.screen)
+            self.screen.blit(self.score(), (SCREEN_WIDTH/1.8, SCREEN_HEIGHT/7))
+            self.draw_power_up_time()
+            self.power_up_manager.draw(self.screen)
+            pygame.display.update()
+            pygame.display.flip()
 
     def draw_power_up_time(self):
         if self.player.has_power_up:
@@ -143,9 +154,11 @@ class Game:
         
         if self.deathCount == 0:
             self.textDraw('Press any key to start', halfw, halfh)
+            self.textDraw('(Press ESC while playing shows music options)', halfw, halfh+30)
         else:
             pygame.time.wait(1000)
             self.textDraw('Press any key to restart', halfw, halfh)
+            self.textDraw('(Press ESC while playing shows music options)', halfw, halfh+100)
             self.textDraw(f'SCORE: {self.lastScore}', halfw, halfh+35)
             self.textDraw(f'Deaths: {self.deathCount}', halfw, halfh+70)
             self.screen.blit(ICON, (halfw - 40, halfh - 140))
@@ -161,10 +174,24 @@ class Game:
         self.screen.blit(text,text_rect)
 
     def score(self):
-        txtfont = pygame.font.SysFont('Arial', 32, True).render(f'PONTUAÇÃO: {self.lastScore}', True, (0,0,0))
-        return txtfont
+        txt = pygame.font.SysFont('Arial', 32, True).render(f'PONTUAÇÃO: {self.lastScore}', True, (0,0,0))
+        return txt
 
-    def soundTracks(self):
-        pygame.mixer.music.load(os.path.join(SONS_DIR, self.music_opt))
-        pygame.mixer.music.play(-1)
-        pygame.mixer.music.set_volume(0.3)
+    def showMusicMenu(self):
+        self.textDraw('PRESS 1 to play Enemy and return', SCREEN_WIDTH/2, SCREEN_HEIGHT/3)
+        self.textDraw('PRESS 2 to play Im So Sorry and return', SCREEN_WIDTH/2, SCREEN_HEIGHT/2.6)
+        self.textDraw("PRESS 3 to play Giorno's Theme and return", SCREEN_WIDTH/2, SCREEN_HEIGHT/2.3)
+        pygame.display.update()
+        self.handle_events_on_pause()
+
+    def handle_events_on_pause(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.playing = False
+                self.running = False
+
+
+def soundTracks(opt):
+    pygame.mixer.music.load(os.path.join(SONS_DIR, opt))
+    pygame.mixer.music.play(-1)
+    pygame.mixer.music.set_volume(0.3)

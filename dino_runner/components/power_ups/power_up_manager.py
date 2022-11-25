@@ -12,7 +12,7 @@ class PowerUpManager:
 
     def generate_power_up(self, score):
         if len(self.power_ups) == 0 and self.when_appears == score:
-            self.when_appears += random.randint(30, 50) 
+            self.when_appears += random.randint(150, 350) 
             self.power_ups.append(choice([Shield(), Hammer()]))
 
     def update(self, score, game_speed, player):
@@ -33,4 +33,4 @@ class PowerUpManager:
 
     def reset_power_ups(self):
         self.power_ups = []
-        self.when_appears = random.randint(30, 50)
+        self.when_appears = random.randint(150, 350)
