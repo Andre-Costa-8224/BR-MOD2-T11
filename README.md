@@ -4,6 +4,11 @@
 
 ### Game's Name: Crazy dino runner
 
-IN THE BR-MOD2-T11 FOLDER, OPEN THE PROMPT/TERMINAL AND USE THE COMMAND BELOW TO BUILD AN EXECUTABLE:
+**REQUIMENTS:**
+- python3
++ pygame
+* cx_freeze (if you want make an executable)
+
+FOR THE LAST OPTION, IN THE BR-MOD2-T11 FOLDER, OPEN THE PROMPT/TERMINAL AND USE THE COMMAND BELOW TO BUILD AN EXECUTABLE:
 
 `python3 setup.py build`
