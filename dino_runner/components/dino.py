@@ -1,12 +1,12 @@
 from pygame.locals import *
 from pygame.sprite import Sprite
-from dino_runner.utils.constants import RUNNING, JUMPING, DUCKING, SCREEN_HEIGHT, DINO_DEAD, DEFAULT_TYPE, SHIELD_TYPE, DUCKING_SHIELD, JUMPING_SHIELD, RUNNING_SHIELD, HAMMER_TYPE, DUCKING_HAMMER, JUMPING_HAMMER, RUNNING_HAMMER, RUNNING_SONIC, DUCKING_SONIC, JUMPING_SONIC, SONIC_TYPE
+from dino_runner.utils.constants import RUNNING, JUMPING, DUCKING, SCREEN_HEIGHT, DINO_DEAD, DEFAULT_TYPE, SHIELD_TYPE, DUCKING_SHIELD, JUMPING_SHIELD, RUNNING_SHIELD, HAMMER_TYPE, DUCKING_HAMMER, JUMPING_HAMMER, RUNNING_HAMMER, RUNNING_SONIC, DUCKING_SONIC, JUMPING_SONIC, SONIC_TYPE, RUNNING_ROBOT, JUMPING_ROBOT, METALCACTUS_TYPE
 
 JUMP_SPEED = 8.5
 
-DUCK_IMG = {DEFAULT_TYPE: DUCKING, SHIELD_TYPE: DUCKING_SHIELD, HAMMER_TYPE: DUCKING_HAMMER, SONIC_TYPE: DUCKING_SONIC}
-JUMP_IMG = {DEFAULT_TYPE: JUMPING, SHIELD_TYPE: JUMPING_SHIELD, HAMMER_TYPE: JUMPING_HAMMER, SONIC_TYPE: JUMPING_SONIC}
-RUN_IMG = {DEFAULT_TYPE: RUNNING, SHIELD_TYPE: RUNNING_SHIELD, HAMMER_TYPE: RUNNING_HAMMER, SONIC_TYPE: RUNNING_SONIC}
+DUCK_IMG = {DEFAULT_TYPE: DUCKING, SHIELD_TYPE: DUCKING_SHIELD, HAMMER_TYPE: DUCKING_HAMMER, SONIC_TYPE: DUCKING_SONIC, METALCACTUS_TYPE: RUNNING_ROBOT}
+JUMP_IMG = {DEFAULT_TYPE: JUMPING, SHIELD_TYPE: JUMPING_SHIELD, HAMMER_TYPE: JUMPING_HAMMER, SONIC_TYPE: JUMPING_SONIC, METALCACTUS_TYPE: JUMPING_ROBOT}
+RUN_IMG = {DEFAULT_TYPE: RUNNING, SHIELD_TYPE: RUNNING_SHIELD, HAMMER_TYPE: RUNNING_HAMMER, SONIC_TYPE: RUNNING_SONIC, METALCACTUS_TYPE: RUNNING_ROBOT}
 
 
 
@@ -17,7 +17,8 @@ class Dino(Sprite):
         self.index = 0
         self.rect = self.image.get_rect()
         self.y = SCREEN_HEIGHT/1.5
-        self.rect.center = (80, self.y)
+        self.rect.x = 80
+
         self.jumping = False
         self.ducking = False
         self.jump_level = JUMP_SPEED
@@ -26,9 +27,6 @@ class Dino(Sprite):
 
     def setup_state(self):
         self.has_power_up = False
-        self.shield = False
-        self.hammer = False
-        self.sonic = False
         self.show_text = False
         self.power_time_up = 0
 
@@ -40,6 +38,7 @@ class Dino(Sprite):
             self.index = 0
         elif self.index > 3 and self.type != 'sonic':
             self.index = 0
+        
 
         self.image = RUN_IMG[self.type][int(self.index)]
             
@@ -47,7 +46,7 @@ class Dino(Sprite):
     def update(self, key):
         if self.jumping == False:
             self.run()
-            if self.ducking:
+            if self.ducking and self.type != 'metalcactus':
                 self.duck()
             else:
                 self.rect.y = self.y-50
@@ -56,6 +55,15 @@ class Dino(Sprite):
             if key[K_DOWN]:
                 self.jumpDown = True
         
+        if self.type == "sonic":
+            self.y += 5
+        else:
+            self.y = SCREEN_HEIGHT/1.5
+
+        if self.type == 'metalcactus':
+            self.y -= 18
+        else:
+            self.y = SCREEN_HEIGHT/1.5
 
         if (key[K_SPACE] or key[K_UP]) and self.jumping == False:
             self.ducking = False

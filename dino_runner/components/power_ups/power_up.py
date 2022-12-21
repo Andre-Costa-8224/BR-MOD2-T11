@@ -1,7 +1,7 @@
 import random
 from pygame.sprite import Sprite
 
-from dino_runner.utils.constants import SCREEN_WIDTH
+from dino_runner.utils.constants import SCREEN_WIDTH, SCREEN_HEIGHT
 
 
 class PowerUp(Sprite):
@@ -15,6 +15,9 @@ class PowerUp(Sprite):
         elif self.type == 'sonic':
             self.rect.x = SCREEN_WIDTH + random.randint(500, 700)
             self.rect.y = random.randint(190, 230)
+        elif self.type == 'metalcactus':
+            self.rect.x = SCREEN_WIDTH + random.randint(595, 795)
+            self.rect.y = SCREEN_HEIGHT/1.8
         else:
             self.rect.x = SCREEN_WIDTH + random.randint(400, 600)
             self.rect.y = random.randint(250, 360)

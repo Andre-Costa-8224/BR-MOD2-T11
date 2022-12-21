@@ -2,7 +2,7 @@ import pygame
 import os
 
 # Global Constants
-TITLE = "Chrome Dino Runner"
+TITLE = "Crazy Dino Runner"
 SCREEN_HEIGHT = 600
 SCREEN_WIDTH = 700
 FPS = 30
@@ -34,10 +34,17 @@ RUNNING_HAMMER = [
     pygame.image.load(os.path.join(IMG_DIR, "Dino/DinoRun2Hammer1.png")),
 ]
 
+RUNNING_ROBOT = []
+
+for c in range(2,4):
+    img = pygame.image.load(os.path.join(IMG_DIR, f"Robot/robo{c}.png"))
+    RUNNING_ROBOT.append(pygame.transform.scale(img, (32*4, 32*4)))
+
 JUMPING = pygame.image.load(os.path.join(IMG_DIR, "Dino/DinoJump.png"))
 JUMPING_SHIELD = pygame.image.load(os.path.join(IMG_DIR, "Dino/DinoJumpShield.png"))
 JUMPING_HAMMER = pygame.image.load(os.path.join(IMG_DIR, "Dino/DinoJumpHammer.png"))
 JUMPING_SONIC = pygame.image.load(os.path.join(IMG_DIR, 'Sonic/sonicAppear.png'))
+JUMPING_ROBOT = pygame.transform.scale(pygame.image.load(os.path.join(IMG_DIR, "Robot/robo1.png")), (32*4, 32*4))
 
 DUCKING = [
     pygame.image.load(os.path.join(IMG_DIR, "Dino/DinoDuck1.png")),
@@ -68,6 +75,7 @@ SMALL_CACTUS = [
     pygame.image.load(os.path.join(IMG_DIR, "Cactus/SmallCactus2.png")),
     pygame.image.load(os.path.join(IMG_DIR, "Cactus/SmallCactus3.png")),
 ]
+
 LARGE_CACTUS = [
     pygame.image.load(os.path.join(IMG_DIR, "Cactus/LargeCactus1.png")),
     pygame.image.load(os.path.join(IMG_DIR, "Cactus/LargeCactus2.png")),
@@ -83,6 +91,7 @@ CLOUD = pygame.image.load(os.path.join(IMG_DIR, 'Other/Cloud.png'))
 SHIELD = pygame.image.load(os.path.join(IMG_DIR, 'Other/shield.png'))
 HAMMER = pygame.image.load(os.path.join(IMG_DIR, 'Other/hammer.png'))
 SONIC = pygame.image.load(os.path.join(IMG_DIR, 'Sonic/sonicAppear.png'))
+METALCACTUS = pygame.transform.scale(pygame.image.load(os.path.join(IMG_DIR, 'Cactus/metalcactus.png')), (40*3.3,40*3))
 
 BG = pygame.image.load(os.path.join(IMG_DIR, 'Other/Track.png'))
 
@@ -92,3 +101,4 @@ DEFAULT_TYPE = "default"
 SHIELD_TYPE = "shield"
 HAMMER_TYPE = 'hammer'
 SONIC_TYPE = 'sonic'
+METALCACTUS_TYPE = 'metalcactus'
